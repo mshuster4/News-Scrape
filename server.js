@@ -11,7 +11,7 @@ var cheerio = require("cheerio");
 // Require routes
 var routes = require("./routes/scrapeRoutes.js");
 
-var PORT = 8080;
+var PORT = process.env.PORT || 3000;
 
 // Initialize Express
 var app = express();
