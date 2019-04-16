@@ -1,7 +1,7 @@
 var express = require("express");
 var mongoose = require("mongoose");
 var exphbs  = require('express-handlebars');
-
+var methodOverride = require("method-override");
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
 // It works on the client and on the server
