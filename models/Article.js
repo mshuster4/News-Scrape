@@ -14,6 +14,12 @@ var ArticleSchema = new Schema({
 
     summary: {
         type: String, 
+        require: true,
+    },
+
+    image: {
+        type: String, 
+        require: true
     },
 
     url: {
