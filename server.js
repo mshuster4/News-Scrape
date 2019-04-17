@@ -22,7 +22,7 @@ app.use(express.static("public"));
 
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scrapeHeadlines";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scrapeHeadline";
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 

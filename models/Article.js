@@ -9,6 +9,7 @@ var ArticleSchema = new Schema({
 
     headline: {
         type: String,
+        index: {unique: true},
         required: true
     },
 

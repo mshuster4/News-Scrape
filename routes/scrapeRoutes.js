@@ -16,6 +16,7 @@ module.exports = function(app) {
     // First, we grab the body of the html with axios
         axios.get("https://www.npr.org/sections/music-news/").then(function(response) {
         // Then, we load that into cheerio and save it to $ for a shorthand selector
+
             var $ = cheerio.load(response.data);
 
             // Now, we grab every h2 within an article tag, and do the following:
@@ -42,6 +43,7 @@ module.exports = function(app) {
                 .find("a")
                 .attr("href");
 
+
                 db.Article.create(result)
                     .then(function(dbArticle) {
                         console.log(dbArticle)
@@ -49,11 +51,10 @@ module.exports = function(app) {
                     .catch(function(err) {
                         console.log(err)
                     });
-        
-                });
+
+            });
 
             res.redirect("/articles");
-
         });
 
     });
