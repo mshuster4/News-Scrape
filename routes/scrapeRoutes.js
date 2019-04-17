@@ -8,7 +8,21 @@ module.exports = function(app) {
 
     // A GET route for displaying home page
     app.get("/", function(req, res) {
-        res.render("index");
+        db.Article.find({})
+           .sort({ timestamp: -1 })
+          .then(function(dbArticles) {
+            // If we were able to successfully find Articles, send them back to the client
+            var hbsObj = {
+                articles: dbArticles
+            };
+
+            res.render("index", hbsObj);
+          })
+          .catch(function(err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+          });
+
     });
 
     // A GET route for scraping the NPR website
@@ -54,28 +68,10 @@ module.exports = function(app) {
 
             });
 
+            res.redirect("/");
+
         });
 
-        res.redirect("/articles");
-
-    });
-
-    app.get("/articles", function(req, res) {
-        // Grab every document in the Articles collection
-        db.Article.find({})
-           .sort({ timestamp: -1 })
-          .then(function(dbArticles) {
-            // If we were able to successfully find Articles, send them back to the client
-            var hbsObj = {
-                articles: dbArticles
-            };
-
-            res.render("index", hbsObj);
-          })
-          .catch(function(err) {
-            // If an error occurred, send it to the client
-            res.json(err);
-          });
 
     });
       

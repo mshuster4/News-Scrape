@@ -3,7 +3,7 @@ $(document).ready(function() {
     $("#scrape").on("click", function() {
        $.ajax({
            method: "GET",
-           url: "/articles"
+           url: "/scrape"
        })
        .then(function(data) {
            $('body').html(data);
