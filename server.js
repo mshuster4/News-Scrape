@@ -8,9 +8,6 @@ var methodOverride = require("method-override");
 var axios = require("axios");
 var cheerio = require("cheerio");
 
-// Require routes
-var routes = require("./routes/scrapeRoutes.js");
-
 var PORT = process.env.PORT || 3000;
 
 // Initialize Express
@@ -25,7 +22,7 @@ app.use(express.static("public"));
 
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scrapeHeadlines";
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
@@ -36,7 +33,7 @@ app.engine("handlebars", exphbs({
 
 app.set("view engine", "handlebars");
 // Routes
-app.use(routes);
+require("./routes/scrapeRoutes.js")(app)
 
 // Start the server
 app.listen(PORT, function() {

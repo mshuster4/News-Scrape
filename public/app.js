@@ -1,11 +1,14 @@
 $(document).ready(function() {
 
-    $(".save-button").on("click", function(event) {
-
-        var savedArticle = $(this).data("id");
-
-        console.log(savedArticle)
-    })
-
+    $("#scrape").on("click", function() {
+       $.ajax({
+           method: "GET",
+           url: "/scrape"
+       })
+       .then(function(data) {
+           $('body').html(data);
+       })
+    
+    });
 
 });
