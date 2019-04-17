@@ -25,7 +25,7 @@ mongoose.Promise = Promise;
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scrapeHeadline";
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
-
+mongoose.set('useCreateIndex', true)
 // Handlebars
 app.engine("handlebars", exphbs({
     defaultLayout: "main",

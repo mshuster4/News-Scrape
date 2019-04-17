@@ -54,8 +54,9 @@ module.exports = function(app) {
 
             });
 
-            res.redirect("/articles");
         });
+
+        res.redirect("/articles");
 
     });
 
