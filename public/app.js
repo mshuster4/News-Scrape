@@ -1,90 +1,46 @@
 $(document).ready(function() {
+
    var articleContainer = $(".article-container");
-  $(document).on("click", ".save-button", handleArticleSave);
+
+  $(document).on("click", ".save", handleArticleSave);
   $(document).on("click", ".scrape-new", handleArticleScrape);
+  $(document).on("click", ".btn.delete", handleArticleDelete);
+
+  $(document).on("click", ".btn.comments", handleArticleComments);
+  $(document).on("click", ".btn.comment-save", handleCommentSave);
+  $(document).on("click", ".btn.comment-delete", handleCommentDelete);
+
+
   $(".clear").on("click", handleArticleClear);
 
-  function initPage() {
-    // Run an AJAX request for any unsaved headlines
-    $.get("/api/articles?saved=false").then(function(data) {
-      articleContainer.empty();
-      // If we have headlines, render them to the page
-      if (data && data.length) {
-        renderArticles(data);
-      } else {
-        // Otherwise render a message explaining we have no articles
-        renderEmpty();
-      }
+  function handleArticleScrape() {
+    // This function handles the user clicking any "scrape new article" buttons
+    $.get("/api/fetch").then(function(data) {
+    
+      initHomePage();
     });
   }
 
-  function renderArticles(articles) {
-    // This function handles appending HTML containing our article data to the page
-    // We are passed an array of JSON containing all available articles in our database
-    var articleCards = [];
-    // We pass each article JSON object to the createCard function which returns a bootstrap
-    // card with our article data inside
-    for (var i = 0; i < articles.length; i++) {
-      articleCards.push(createCard(articles[i]));
-    }
-    // Once we have all of the HTML for the articles stored in our articleCards array,
-    // append them to the articleCards container
-    articleContainer.append(articleCards);
+  function initHomePage() {
+    // Run an AJAX request for any unsaved headlines
+    $.get("/api/articles?saved=false").then(function(data) {
+
+      location.reload();
+    });
+
   }
 
-  function createCard(article) {
-    // This function takes in a single JSON object for an article/headline
-    // It constructs a jQuery element containing all of the formatted HTML for the
-    // article card
-    var card = $("<div class='card'>");
-    var cardHeader = $("<div class='card-header'>").append(
-      $("<h3>").append(
-        $("<a class='article-link' target='_blank' rel='noopener noreferrer'>")
-          .attr("href", article.url)
-          .text(article.headline),
-        $("<a class='btn btn-success save'>Save Article</a>")
-      )
-    );
+  function initSavedPage() {
+    $.get("/api/articles?saved=true").then(function(data) {
+     
+     location.reload();
+    });
 
-    var cardImage = $("<div class=card-image'>").attr("src", article.image)
-
-    var cardBody = $("<div class='card-body'>").text(article.summary);
-
-    card.append(cardHeader, cardImage, cardBody);
-    // We attach the article's id to the jQuery element
-    // We will use this when trying to figure out which article the user wants to save
-    card.data("_id", article._id);
-    // We return the constructed card jQuery element
-    return card;
   }
 
-  function renderEmpty() {
-    // This function renders some HTML to the page explaining we don't have any articles to view
-    // Using a joined array of HTML string data because it's easier to read/change than a concatenated string
-    var emptyAlert = $(
-      [
-        "<div class='alert alert-warning text-center'>",
-        "<h4>Uh Oh. Looks like we don't have any new articles.</h4>",
-        "</div>",
-        "<div class='card'>",
-        "<div class='card-header text-center'>",
-        "<h3>What Would You Like To Do?</h3>",
-        "</div>",
-        "<div class='card-body text-center'>",
-        "<h4><a class='scrape-new'>Try Scraping New Articles</a></h4>",
-        "<h4><a href='/saved'>Go to Saved Articles</a></h4>",
-        "</div>",
-        "</div>"
-      ].join("")
-    );
-    // Appending this data to the page
-    articleContainer.append(emptyAlert);
-  }
 
   function handleArticleSave() {
     // This function is triggered when the user wants to save an article
-    // When we rendered the article initially, we attached a javascript object containing the headline id
-    // to the element using the .data method. Here we retrieve that.
     var articleToSave = $(this)
       .parents(".card")
       .data();
@@ -95,7 +51,6 @@ $(document).ready(function() {
       .remove();
 
     articleToSave.saved = true;
-    // Using a patch method to be semantic since this is an update to an existing record in our collection
     $.ajax({
       method: "PUT",
       url: "/api/articles/" + articleToSave._id,
@@ -103,8 +58,8 @@ $(document).ready(function() {
     }).then(function(data) {
       // If the data was saved successfully
       if (data.saved) {
-        // Run the initPage function again. This will reload the entire list of articles
-        initPage();
+        // This will reload the entire list of articles
+        initHomePage();
       }
     });
   }
@@ -112,18 +67,128 @@ $(document).ready(function() {
   function handleArticleScrape() {
     // This function handles the user clicking any "scrape new article" buttons
     $.get("/api/fetch").then(function(data) {
-      // If we are able to successfully scrape the NYTIMES and compare the articles to those
-      // already in our collection, re render the articles on the page
-      // and let the user know how many unique articles we were able to save
-      initPage();
-      bootbox.alert($("<h3 class='text-center m-top-80'>").text(data.message));
+    
+      initHomePage();
+    });
+  }
+
+  function renderCommentsList(data) {
+    // This function handles rendering comment list
+    var commentsToRender = [];
+    var currentComment;
+    if (!data.comments.length) {
+      // If we have no notes, just display a message explaining this
+      currentComment = $("<li class='list-group-item'>No Comments for this article yet.</li>");
+      commentsToRender.push(currentComment);
+    } else {
+      for (var i = 0; i < data.comments.length; i++) {
+        currentComment = $("<li class='list-group-item comment'>")
+          .text(data.comments[i].commentText)
+          .append($("<button class='btn btn-danger comment-delete'>x</button>"));
+        currentComment.children("button").data("_id", data.comments[i]._id);
+        commentsToRender.push(currentComment);
+      }
+    }
+    // Now append the notesToRender to the note-container inside the note modal
+    $(".comments-container").append(commentsToRender);
+  }
+
+
+
+  function handleArticleComments(event) {
+    // This function handles opening the notes modal and displaying our notes
+    // We grab the id of the article to get notes for from the card element the delete button sits inside
+    var currentArticle = $(this)
+      .parents(".card")
+      .data();
+
+    // Grab any notes with this headline/article id
+    $.get("/api/comments/" + currentArticle._id).then(function(data) {
+      // Constructing our initial HTML to add to the notes modal
+      var modalText = $("<div class='container-fluid text-center'>").append(
+        $("<h4>").text("Comments For Article: " + currentArticle._id),
+        $("<hr>"),
+        $("<ul class='list-group comments-container'>"),
+        $("<textarea placeholder='New Comment' rows='4' cols='60'>"),
+        $("<button class='btn btn-success comment-save'>Save Comment</button>")
+      );
+      // Adding the formatted HTML to the note modal
+      bootbox.dialog({
+        message: modalText,
+        closeButton: true
+      });
+      var commentData = {
+        _id: currentArticle._id,
+        comments: data || []
+      };
+      // Adding some information about the article and article notes to the save button for easy access
+      // When trying to add a new note
+      $(".btn.comment-save").data("article", commentData);
+      // renderNotesList will populate the actual note HTML inside of the modal we just created/opened
+      renderCommentsList(commentData);
+    });
+  }
+
+  function handleCommentSave() {
+    // This function handles what happens when a user tries to save a new note for an article
+    // Setting a variable to hold some formatted data about our note,
+    // grabbing the note typed into the input box
+    var commentData;
+    var newComment = $(".bootbox-body textarea")
+      .val()
+      .trim();
+    // If we actually have data typed into the note input field, format it
+    // and post it to the "/api/notes" route and send the formatted noteData as well
+    if (newComment) {
+      commentData = { _articleId: $(this).data("article")._id, commentText: newComment };
+      $.post("/api/comments", commentData).then(function() {
+        // When complete, close the modal
+        bootbox.hideAll();
+      });
+    }
+  }
+
+  function handleCommentDelete() {
+    // This function handles the deletion of comments
+
+    var commentToDelete = $(this).data("_id");
+
+    $.ajax({
+      url: "/api/comments/" + commentToDelete,
+      method: "DELETE"
+    }).then(function() {
+      // When done, hide the modal
+      bootbox.hideAll();
+    });
+  }
+
+   function handleArticleDelete() {
+    // This function handles deleting articles/headlines
+    // We grab the id of the article to delete from the card element the delete button sits inside
+    var articleToDelete = $(this)
+      .parents(".card")
+      .data();
+
+    // Remove card from page
+    $(this)
+      .parents(".card")
+      .remove();
+    // Using a delete method here just to be semantic since we are deleting an article/headline
+    $.ajax({
+      method: "DELETE",
+      url: "/api/articles/" + articleToDelete._id
+    }).then(function(data) {
+      // If this works out, run initPage again which will re-render our list of saved articles
+      if (data.ok) {
+        initSavedPage();
+      }
     });
   }
 
   function handleArticleClear() {
     $.get("api/clear").then(function() {
       articleContainer.empty();
-      initPage();
+      initHomePage();
     });
   }
 

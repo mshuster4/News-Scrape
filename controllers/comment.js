@@ -15,7 +15,7 @@ module.exports = {
   },
   // Delete 
   delete: function(req, res) {
-    db.Comment.remove({ _id: req.params.id }).then(function(dbComment) {
+    db.Comment.deleteOne({ _id: req.params.id }).then(function(dbComment) {
       res.json(dbComment);
     });
   }

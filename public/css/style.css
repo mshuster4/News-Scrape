@@ -8,3 +8,9 @@ button {
     border: 0
 }
 
+.jumbotron {
+    background-image: url("images/music-news-background.jpg");
+    background-size: cover;
+    height: 50vh;
+}
+
