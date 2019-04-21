@@ -1,47 +1,91 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container nav-container">
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/saved">Saved Articles</a>
-                </li>
-                <li class="nav-item">
-                    <form action="/scrape" method="POST" class="navbar-form navbar-left">
-                        <button type="submit" class="nav-link" href="/scrape">Scrape New Articles</a>
-                    </form>
-                </li>
-            </ul>
-        </div>
-    </div>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container nav-container">
+    <a class="navbar-brand" href="/">Music News Scraper</a>
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/saved">Saved</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-danger scrape-new">Scrape</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-danger clear">Clear</a>
+          </li>
+        </ul>
+      </div>
+  </div>
 </nav>
 
-<div class="jumbotron">
-    <h1 class="text-center">Music News</h1>
+<div class="jumbotron text-center">
+  <div class="overlay">
+  </div>
+  <div class="background-image">
+  </div>
+  <div class="caption">
+    <h1>Mongo Scraper</h1>
+    <p>Music Edition</p>
+  </div>
 </div>
 
-<div class="container">
-
-    {{#each articles}}
-        <div class="row">
-            <div class="col-sm-12">
-                <h4>{{this.headline}}</h4>
+<div class="container article-container">
+  <div class="row">
+    <div class="col-sm-12">
+          {{#each articles}}
+          <div data-_id="{{this._id}}" class="card">
+              <div class="card-header">
+                <h3>
+                  <a class="article-link" target="_blank" rel="noopener noreferrer" href="{{this.url}}">{{this.headline}}</a>
+                </h3>
+              </div>
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="card-image">
+                  <img class="img-responsive" src="{{this.image}}">
+                </div>
+              </div>
+              <div class="col-sm-9">
+                <div class="card-body">{{this.summary}}</div>
+              </div>
             </div>
-        </div>
+            <div class="row">
+              <div class="col-sm-4"></div>
+              <div class="col-sm-4">
+                <a class="btn btn-default text-right save">Save</a>
+                <a class="btn btn-default text-left comment">Comment</a>
+              </div>
+              <div class="col-sm-4"></div>
+          </div>
+          {{/each}} {{#unless articles.length}}
+      </div>
+  </div>
+</div>
 
-        <div class="row">
-            <div class="col-sm-2">
-                <img class="img-fluid" src="{{this.image}}" alt="">
-            </div>
-
-            <div class="col-sm-10">
-                {{this.summary}}
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-6">
-                <a href="{{this.url}}" target="_blank">Read Here</a>
-            </div>
-        </div>
-    {{/each}}
+  <div class='alert alert-warning text-center'>
+    <h4>Uh Oh. Looks like we don't have any new articles.</h4>
+  </div>
+  <div class="card">
+    <div class="card-header text-center">
+      <h3>What Would You Like To Do?</h3>
+    </div>
+    <div class="card-body text-center">
+      <h4>
+        <a class="scrape-new">Try Scraping New Articles</a>
+      </h4>
+      <h4>
+        <a href="/saved">Go to Saved Articles</a>
+      </h4>
+    </div>
+  </div>
+  {{/unless}}
 </div>

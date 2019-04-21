@@ -6,8 +6,17 @@ var Schema = mongoose.Schema;
 // Comment Schema 
 var CommentSchema = new Schema({
 
-    title: String,
-    body: String
+    _articleId: {
+        type: Schema.Types.ObjectId,
+        ref: "Article"
+    },
+
+    date: {
+        type: Date,
+        default: Date.now
+    },
+
+    commentText: String
 });
 
 var Comment = mongoose.model("Comment", CommentSchema);

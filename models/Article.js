@@ -9,8 +9,8 @@ var ArticleSchema = new Schema({
 
     headline: {
         type: String,
-        index: {unique: true},
-        required: true
+        required: true,
+        unique: { index: { unique: true } }
     },
 
     summary: {
@@ -28,10 +28,16 @@ var ArticleSchema = new Schema({
         required: true
     },
 
-    comment: {
-        type: Schema.Types.ObjectId, 
-        ref: "Comment"
-    }
+    saved: {
+        type: Boolean,
+        default: false
+    },
+
+    date: {
+        type: Date,
+        default: Date.now
+    },
+    
 });
 
 var Article = mongoose.model("Article", ArticleSchema);
