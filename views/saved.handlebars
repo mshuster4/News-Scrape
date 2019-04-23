@@ -1,26 +1,29 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container nav-container">
-    <a class="navbar-brand" href="/">Music News Scraper</a>
+    <a class="navbar-brand" href="/">Mongo Scraper</a>
     <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="/">Home
               <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" href="/saved">Saved</a>
+            <span class="sr-only">(current)</span>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="btn btn-default scrape-new">Scrape Articles</a>
           </li>
           <li class="nav-item">
-            <a class="btn btn-default scrape-new">Scrape</a>
-          </li>
-          <li class="nav-item">
-            <a class="btn btn-default clear">Clear</a>
+            <a class="btn btn-default clear">Clear Articles</a>
           </li>
         </ul>
       </div>
@@ -28,13 +31,15 @@
 </nav>
 
 <div class="jumbotron text-center">
-  <div class="overlay">
-  </div>
-  <div class="background-image">
-  </div>
-  <div class="caption">
-    <h1>Mongo News Scraper</h1>
-    <p>Music Edition</p>
+  <div class="container">
+    <div class="caption">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>Mongo Scraper</h1>
+          <p>Music News Edition</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -44,43 +49,31 @@
           {{#each articles}}
           <div data-_id="{{this._id}}" class="card">
               <div class="card-header">
-                <h3>
+                <h3 class="text-center">
                   <a class="article-link" target="_blank" rel="noopener noreferrer" href="{{this.url}}">{{this.headline}}</a>
-                  <a class="btn btn-default delete">Delete from Saved</a>
-                  <a class="btn btn-default comments">View Comments</a>
                 </h3>
               </div>
             <div class="row">
               <div class="col-sm-3">
                 <div class="card-image">
-                  <img class="img-responsive" src="{{this.image}}">
+                  <img class="img-fluid" src="{{this.image}}">
                 </div>
               </div>
               <div class="col-sm-9">
                 <div class="card-body">{{this.summary}}</div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-6 text-center">
+                <a class="btn btn-default delete">Delete from Saved</a>
+                <a class="btn btn-default comments">View Comments</a>
+              </div>
+              <div class="col-sm-3"></div>
+            </div>
           </div>
-          {{/each}} {{#unless articles.length}}
+          {{/each}} 
       </div>
   </div>
 </div>
 
-  <div class='alert alert-warning text-center'>
-    <h4>Uh Oh. Looks like we don't have any new articles.</h4>
-  </div>
-  <div class="card">
-    <div class="card-header text-center">
-      <h3>What Would You Like To Do?</h3>
-    </div>
-    <div class="card-body text-center">
-      <h4>
-        <a class="scrape-new">Try Scraping New Articles</a>
-      </h4>
-      <h4>
-        <a href="/saved">Go to Saved Articles</a>
-      </h4>
-    </div>
-  </div>
-  {{/unless}}
-</div>

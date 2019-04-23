@@ -16,11 +16,13 @@
           <li class="nav-item">
             <a class="nav-link" href="/saved">Saved</a>
           </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="btn btn-danger scrape-new">Scrape</a>
+            <a class="btn btn-default scrape-new">Scrape Articles</a>
           </li>
           <li class="nav-item">
-            <a class="btn btn-danger clear">Clear</a>
+            <a class="btn btn-default clear">Clear Articles</a>
           </li>
         </ul>
       </div>
@@ -28,11 +30,15 @@
 </nav>
 
 <div class="jumbotron text-center">
-  <div class="overlay">
-  </div>
-  <div class="caption">
-    <h1>Mongo Scraper</h1>
-    <p>New York Times Edition</p>
+  <div class="container">
+    <div class="caption">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>Mongo Scraper</h1>
+          <p>Music News Edition</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -42,7 +48,7 @@
           {{#each articles}}
           <div data-_id="{{this._id}}" class="card">
               <div class="card-header">
-                <h3>
+                <h3 class="text-center">
                   <a class="article-link" target="_blank" rel="noopener noreferrer" href="{{this.url}}">{{this.headline}}</a>
                 </h3>
               </div>
@@ -57,9 +63,11 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-12">
+              <div class="col-sm-5"></div>
+              <div class="col-sm-2 text-center">
                 <a class="btn btn-default save">Save Article</a>
               </div>
+              <div class="col-sm-5"></div>
             </div>
           </div>
           {{/each}} 

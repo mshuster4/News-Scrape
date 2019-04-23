@@ -82,37 +82,36 @@ $(document).ready(function() {
       commentsToRender.push(currentComment);
     } else {
       for (var i = 0; i < data.comments.length; i++) {
-        currentComment = $("<li class='list-group-item comment'>")
+        currentComment = $("<li class='list-group-item list-group-flush comment'>")
           .text(data.comments[i].commentText)
           .append($("<button class='btn btn-danger comment-delete'>x</button>"));
         currentComment.children("button").data("_id", data.comments[i]._id);
         commentsToRender.push(currentComment);
       }
     }
-    // Now append the notesToRender to the note-container inside the note modal
+  
     $(".comments-container").append(commentsToRender);
   }
 
 
 
   function handleArticleComments(event) {
-    // This function handles opening the notes modal and displaying our notes
-    // We grab the id of the article to get notes for from the card element the delete button sits inside
+    // This function handles opening the comment modal 
     var currentArticle = $(this)
       .parents(".card")
       .data();
 
-    // Grab any notes with this headline/article id
+    // Grab any comments with this headline/article id
     $.get("/api/comments/" + currentArticle._id).then(function(data) {
-      // Constructing our initial HTML to add to the notes modal
+      // Constructing our initial HTML to add to the comments modal
       var modalText = $("<div class='container-fluid text-center'>").append(
-        $("<h4>").text("Comments For Article: " + currentArticle._id),
+        $("<h4>").text("Comments For Article: "),
         $("<hr>"),
         $("<ul class='list-group comments-container'>"),
-        $("<textarea placeholder='New Comment' rows='4' cols='60'>"),
-        $("<button class='btn btn-success comment-save'>Save Comment</button>")
+        $("<textarea placeholder='New Comment' rows='4' cols='52'>"),
+        $("<button class='btn btn-default comment-save'>Save Comment</button>")
       );
-      // Adding the formatted HTML to the note modal
+      // Adding the formatted HTML to the comment modal
       bootbox.dialog({
         message: modalText,
         closeButton: true
@@ -121,24 +120,19 @@ $(document).ready(function() {
         _id: currentArticle._id,
         comments: data || []
       };
-      // Adding some information about the article and article notes to the save button for easy access
-      // When trying to add a new note
+      
       $(".btn.comment-save").data("article", commentData);
-      // renderNotesList will populate the actual note HTML inside of the modal we just created/opened
+      
       renderCommentsList(commentData);
     });
   }
 
   function handleCommentSave() {
-    // This function handles what happens when a user tries to save a new note for an article
-    // Setting a variable to hold some formatted data about our note,
-    // grabbing the note typed into the input box
+    // This function handles what happens when a user tries to save a new comment for an article
     var commentData;
     var newComment = $(".bootbox-body textarea")
       .val()
       .trim();
-    // If we actually have data typed into the note input field, format it
-    // and post it to the "/api/notes" route and send the formatted noteData as well
     if (newComment) {
       commentData = { _articleId: $(this).data("article")._id, commentText: newComment };
       $.post("/api/comments", commentData).then(function() {

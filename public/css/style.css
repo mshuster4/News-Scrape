@@ -1,16 +1,110 @@
+a:hover,
+a.btn.btn-default.comments:hover,
+a.btn.btn-default.delete:hover,
+a.btn.btn-default.comment-save:hover,
+a.btn.btn-default.save:hover  {
+    text-decoration: none;
+    color: #72302a;
+}
+
 body, html {
     width: 100%;
     height: auto;
+    background-color: black;
+}
+
+.bg-primary {
+    background-color: #72302a !important;
+    color: white; 
+}
+
+.navbar-brand {
+    font-family: whomp, sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 button {
     background: 0;
-    border: 0
+    border: 0;
 }
 
 .jumbotron {
     background-image: url("images/music-news-background.jpg");
     background-size: cover;
-    height: 50vh;
+    padding: 70px 0px 70px 0px;
+    border-radius: 0px;
 }
 
+h1 {
+    font-family: whomp, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.caption {
+    background-color: rgba(255,255,255);
+    color: black;
+    border-radius: 4px;
+    padding: 40px 0px 40px 0px;
+    border: 2px solid #747366;
+}
+
+.card {
+    margin-bottom: 30px;
+    border: 2px solid #747366;
+}
+
+.card-header {
+    border-bottom: 2px solid #747366;
+}
+.card-body {
+    padding: 20px 20px 5px 0px;
+}
+
+img {
+    padding: 25px 0px 0px 25px;
+}
+
+a.btn.btn-default.save {
+    color: #057aff;
+    margin-bottom: 5px;
+}
+
+a.btn.btn-default.delete {
+    color: #057aff;
+    margin-bottom: 5px;
+}
+
+a.btn.btn-default.comments {
+    color: #057aff;
+    margin-bottom: 5px;
+}
+
+textarea {
+    overflow: auto;
+    resize: vertical;
+    border: 2px solid grey;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+h4 {
+    color: #057aff;
+}
+
+.comment-save {
+    color: #057aff;
+    padding: 5px 0px 0px 0px;
+}
+
+.comment {
+    border-left: 0px;
+    border-right: 0px;
+    border-radius: 0px; 
+}
+
+.comment-delete {
+    margin-left: 10px;
+    padding: 2px;
+}
