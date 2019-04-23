@@ -1,7 +1,7 @@
 # Mongo Scraper (Music News Edition)
 Application for scraping, saving, and commenting on music related journalism.
 
-Check out the demo [here] (https://powerful-ridge-13042.herokuapp.com/).
+Check out the demo [here](https://powerful-ridge-13042.herokuapp.com/).
 
 ## Homepage After Scrape 
 ![Homepage](public/css/images/home.png)
