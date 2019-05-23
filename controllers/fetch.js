@@ -1,53 +1,31 @@
-var axios = require("axios");
-var cheerio = require("cheerio")
+var scrape = require("../scripts/scrape")
 var db = require("../models");
 
 
 module.exports = {
   scrapeArticles: function(req, res) {
 
-      axios.get("https://www.npr.org/sections/music-news/").then(function(response) {
-        // Then, we load that into cheerio and save it to $ for a shorthand selector
+    return scrape()
+      .then(function(articles) {
+        return db.Article.create(articles);
+      })
+      .then(function(dbArticle) {
+        if (dbArticle.length === 0) {
+          res.json({
+            message: "No new articles today.  Check back tomorrow."
+          })
+        }
+        else {
+          res.json({
+            message: "Added" + dbArticle.length + "new articles!"
+          })
+        }
+      })
+      .catch(function(err) {
+        res.json({
+          message: "Scrape complete!"
+        })
+      })
 
-          var $ = cheerio.load(response.data);
-
-          // Now, we grab every h2 within an article tag, and do the following:
-          $("article.has-image").each(function(i, element) {
-              // Save an empty result object
-              var result = {};
-
-              // Add the text and href of every link, and save them as properties of the result object
-              result.headline = $(this)
-              .find("h2")
-              .text().trim();
-              
-              result.summary = $(this)
-              .find("div.item-info")
-              .children("p.teaser")
-              .children("a")
-              .text();
-
-              result.image = $(this)
-              .find("img")
-              .attr("src")
-
-              result.url = $(this)
-              .find("a")
-              .attr("href");
-
-              db.Article.create(result)
-                .then(function(dbArticle) {
-
-                  console.log(dbArticle);
-                })
-                .catch(function(err) {
-                  
-                  console.log(err);
-                });
-
-            });
-
-      
-        });
-    }
-}
+  }
+};

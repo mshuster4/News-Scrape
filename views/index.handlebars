@@ -70,7 +70,11 @@
               <div class="col-sm-5"></div>
             </div>
           </div>
-          {{/each}} 
+          {{/each}} {{#unless articles.length}}
+          <div class="alert alert-warning text-center">
+              <h4>Press "Scrape Articles" to find out what is new in the music industry.</h4>
+          </div>
+          {{/unless}}
       </div>
   </div>
 </div>
